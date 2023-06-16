@@ -138,6 +138,8 @@ OPTISTRUCT_VERSIONS = [
     b"OS2021.1",
     b"OS2021.2",
     b"OS2022.1",
+    b'OS2022.2',
+    b'OS2022.3',
 ]
 
 
