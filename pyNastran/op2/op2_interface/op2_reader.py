@@ -138,8 +138,8 @@ OPTISTRUCT_VERSIONS = [
     b"OS2021.1",
     b"OS2021.2",
     b"OS2022.1",
-    b'OS2022.2',
-    b'OS2022.3',
+    b"OS2022.2",
+    b"OS2022.3",
 ]
 
 
@@ -338,7 +338,7 @@ class OP2Reader:
             op2.post = -4
             mode = "nasa95"
         elif isinstance(op2._nastran_format, str):
-            if op2._nastran_format not in ["msc", "nx", "optistruct"]:
+            if op2._nastran_format not in ["msc", "nx", "optistruct", "abaqus"]:
                 raise RuntimeError(
                     f'nastran_format={op2._nastran_format} mode={mode} and must be "msc", "nx", "optistruct", or "autodesk"'
                 )
@@ -2037,6 +2037,8 @@ class OP2Reader:
             raise SubTableReadError("cannot read table_name=%r" % table_names)
 
         table_name_str = table_name_bytes.decode("utf-8").strip()
+        if table_name_str == "BGDPT":
+            table_name_str = "BGPDT"
         assert (
             table_name_str in table_names
         ), f"actual={table_name_str} allowed={table_names}"
@@ -3477,7 +3479,7 @@ class OP2Reader:
 
         """
         op2 = self.op2
-        allowed_forms = [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 13, 15]
+        allowed_forms = [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 13, 15]  
         # self.log.debug('----------------------------------------------------------------')
         table_name = self._read_table_name(rewind=False, stop_on_failure=True)
         self.read_markers([-1])
@@ -3515,6 +3517,7 @@ class OP2Reader:
         # 1 - column matrix
         # 2 - factor matrix
         # 3 - factor matrix
+
         if tout == 1:
             dtype = "float32"
         elif tout == 2:
@@ -4006,7 +4009,6 @@ class OP2Reader:
         for col_nidi, col_dofi, istarti, istopi in zip(
             col_nids_short, col_dofs_short, istart + 2, istop
         ):
-
             ## TODO: preallocate arrays
             imag = None
             # The float32/complex64 blocks are really simple
@@ -6591,6 +6593,8 @@ def _parse_nastran_version_8(data: bytes, version: bytes, encoding: str, log) ->
     elif version in OPTISTRUCT_VERSIONS:
         # should this be called optistruct or radioss?
         mode = "optistruct"
+    elif version in [b"ODB2OP2"]:
+        mode = "abaqus"
     # elif data[:20] == b'XXXXXXXX20141   0   ':
     # self.set_as_msc()
     # self.set_table_type()

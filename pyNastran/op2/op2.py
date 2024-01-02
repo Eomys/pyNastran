@@ -341,6 +341,8 @@ class OP2(OP2_Scalar, OP2Writer):
             self.set_as_nasa95()
         elif mode.lower() == 'optistruct': # radioss,
             self.set_as_optistruct()
+        elif  mode.lower() == 'abaqus':
+            self.set_as_abaqus()
         else:
             raise RuntimeError(f'mode={mode!r} and must be in [msc, nx, '
                                f'autodesk, nasa95, optistruct]')
