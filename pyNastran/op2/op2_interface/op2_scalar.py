@@ -479,6 +479,7 @@ class OP2_Scalar(LAMA, ONR, OGPF,
         self.is_autodesk = False
         self.is_nasa95 = False
         self.is_optistruct = False
+        self.is_abaqus = False
         self._nastran_format = 'nx'
 
     def set_as_msc(self):
@@ -487,6 +488,7 @@ class OP2_Scalar(LAMA, ONR, OGPF,
         self.is_autodesk = False
         self.is_nasa95 = False
         self.is_optistruct = False
+        self.is_abaqus = False
         self._nastran_format = 'msc'
 
     def set_as_autodesk(self):
@@ -495,6 +497,7 @@ class OP2_Scalar(LAMA, ONR, OGPF,
         self.is_autodesk = True
         self.is_nasa95 = False
         self.is_optistruct = False
+        self.is_abaqus = False
         self._nastran_format = 'autodesk'
 
     def set_as_nasa95(self):
@@ -504,6 +507,7 @@ class OP2_Scalar(LAMA, ONR, OGPF,
         self.is_optistruct = False
         self.is_nasa95 = True
         self._nastran_format = 'nasa95'
+        self.is_abaqus = False
         self._read_oes1_loads = self._read_oes1_loads_nasa95
         self._read_oef1_loads = self._read_oef1_loads_nasa95
 
@@ -513,7 +517,17 @@ class OP2_Scalar(LAMA, ONR, OGPF,
         self.is_autodesk = False
         self.is_nasa95 = False
         self.is_optistruct = True
+        self.is_abaqus = False
         self._nastran_format = 'optistruct'
+        
+    def set_as_abaqus(self):
+        self.is_nx = False
+        self.is_msc = False
+        self.is_autodesk = False
+        self.is_nasa95 = False
+        self.is_optistruct = False
+        self.is_abaqus = True
+        self._nastran_format = 'abaqus'
 
     def __init__(self, debug=False, log=None, debug_file=None):
         """
