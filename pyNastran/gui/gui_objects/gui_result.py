@@ -405,7 +405,7 @@ class GuiResult(GuiResultCommon):
                 inan_short = np.where(self.scalar == mask_value)[0]
                 if len(inan_short):
                     # overly complicated way to allow us to use ~inan to invert the array
-                    inan = np.in1d(np.arange(len(self.scalar)), inan_short)
+                    inan = np.isin(np.arange(len(self.scalar)), inan_short)
                     inan_remaining = self.scalar[~inan]
 
                     self.scalar = np.asarray(self.scalar, 'f')

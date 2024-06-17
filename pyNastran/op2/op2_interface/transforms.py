@@ -230,7 +230,7 @@ def transform_gpforce_to_globali(subcase, result,
             log.debug('nids = %s' % list(nids))
 
             # the indices of the grid points that we're transforming
-            inode_gp = np.where(np.in1d(nids_all_gp, nids))[0]
+            inode_gp = np.where(np.isin(nids_all_gp, nids))[0]
             log.debug('inode_gp = %s' % list(inode_gp))
             nids_gp = nids_all_gp[inode_gp]
             log.debug('nids_gp = %s' % list(nids_gp))
@@ -297,7 +297,7 @@ def _transform_cylindrical_gpforce(unused_inode_xyz, inode_gp, data, cid_transfo
     #print('theta     = %s' % list(theta))
 
     for itime in range(data.shape[0]):
-        #inode = np.where(np.in1d(nids_all, 2))[0]
+        #inode = np.where(np.isin(nids_all, 2))[0]
         #print('start', data[itime, inode_gp, :3])
         translation = data[itime, inode_gp, :3]
         rotation = data[itime, inode_gp, 3:]

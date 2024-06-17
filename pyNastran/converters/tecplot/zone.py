@@ -425,7 +425,7 @@ class Zone:
         if nhexas:
             #boolean_hexa = self.hexa_elements.ravel() == inodes
             #boolean_hexa = (self.hexa_elements.ravel() == inodes)#.all(axis=1)
-            boolean_hexa = np.in1d(self.hexa_elements.ravel(), inodes).reshape(nhexas, 8)
+            boolean_hexa = np.isin(self.hexa_elements.ravel(), inodes).reshape(nhexas, 8)
             #print(boolean_hexa)
             # assert len(boolean_hexa) == self.hexa_elements.shape[0]
             assert True in boolean_hexa

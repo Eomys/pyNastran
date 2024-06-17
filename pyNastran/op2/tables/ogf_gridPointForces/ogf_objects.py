@@ -465,7 +465,7 @@ class RealGridPointForcesArray(GridPointForces):
 
         assert isinstance(eids[0], integer_types), type(eids[0])
 
-        is_in = np.in1d(gpforce_eids, eids, assume_unique=False)
+        is_in = np.isin(gpforce_eids, eids, assume_unique=False)
         irange = np.arange(len(gpforce_nids), dtype='int32')[is_in]
         nids = gpforce_nids[irange]
 
@@ -475,7 +475,7 @@ class RealGridPointForcesArray(GridPointForces):
             log.debug('eids = %s' % gpforce_eids[irange])
 
         try:
-            is_in3 = np.in1d(nid_cd[:, 0], nids, assume_unique=False)
+            is_in3 = np.isin(nid_cd[:, 0], nids, assume_unique=False)
         except IndexError:
             msg = 'nids_cd=%s nids=%s' % (nid_cd, nids)
             raise IndexError(msg)
@@ -591,9 +591,27 @@ class RealGridPointForcesArray(GridPointForces):
 
         assert isinstance(eids[0], integer_types), type(eids[0])
         assert isinstance(nids[0], integer_types), type(nids[0])
-        is_in = np.in1d(gpforce_nids, nids, assume_unique=False)
-        is_in2 = np.in1d(gpforce_eids[is_in], eids, assume_unique=False)
-        irange = np.arange(len(gpforce_nids), dtype='int32')[is_in][is_in2]
+        # filter out rows not in the node set
+        is_in = np.isin(gpforce_nids, nids, assume_unique=False)
+        if not np.any(is_in):
+            msg = 'no nodes found\n'
+            if log:
+                log.warning(msg)
+            else:
+                warnings.warn(msg)
+            irange = np.array([], dtype='int32')
+            return gpforce_nids, gpforce_eids, irange, force_out, moment_out
+
+        # filter out rows not in the element set
+        is_in2 = np.isin(gpforce_eids[is_in], eids, assume_unique=False)
+        if not np.any(is_in2):
+            msg = 'no elements found\n'
+            log.warning(msg)
+            irange = np.array([], dtype='int32')
+            return gpforce_nids, gpforce_eids, irange, force_out, moment_out
+
+        igpforce_nids = np.arange(len(gpforce_nids), dtype=idtype)
+        irange = igpforce_nids[is_in][is_in2]
         if irange.size == 0:
             msg = 'no nodes/elements found\n'
             msg += 'eids=%s\n' % (eids)
@@ -610,7 +628,7 @@ class RealGridPointForcesArray(GridPointForces):
             log.debug('eids = %s' % gpforce_eids[irange])
 
         try:
-            is_in3 = np.in1d(nid_cd[:, 0], nids, assume_unique=False)
+            is_in3 = np.isin(nid_cd[:, 0], nids, assume_unique=False)
         except IndexError:
             msg = 'nids_cd=%s nids=%s' % (nid_cd, nids)
             raise IndexError(msg)
