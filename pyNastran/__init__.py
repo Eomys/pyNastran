@@ -15,7 +15,7 @@ else:
         raise ImportError('Upgrade your Python to >= 3.7.0; version=(%s.%s.%s)' % (
             IMAJOR, MINOR1, MINOR2))
 
-    __version__ = '1.3.4.1'
+    __version__ = '1.3.4.3'
     __releaseDate__ = '2022/5/30'
     __releaseDate2__ = 'MAY 30, 2022'
 
